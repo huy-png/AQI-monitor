@@ -1,0 +1,21 @@
+{
+  "name": "climasense",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "build": "npm -w @climasense/shared run build && npm -w @climasense/frontend run build && npm -w @climasense/backend run build",
+    "test": "npm -w @climasense/backend test",
+    "lint": "npm -w @climasense/frontend run lint && npm -w @climasense/backend run lint",
+    "dev:frontend": "npm -w @climasense/frontend run dev",
+    "dev:backend": "npm -w @climasense/backend run start:dev"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4"
+  }
+}
