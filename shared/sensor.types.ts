@@ -9,6 +9,14 @@ export interface ClimateReading {
   windSpeed: number;
   latitude?: number;
   longitude?: number;
+  /** Ambient pollutant concentrations in µg/Nm³; absent when not measured. */
+  so2?: number;
+  co?: number;
+  no2?: number;
+  o3?: number;
+  tsp?: number;
+  pm10?: number;
+  pm25?: number;
 }
 
 export interface ReadingSummary {

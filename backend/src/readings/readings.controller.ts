@@ -1,10 +1,17 @@
+import { ArchiveService } from "./archive.service";
 import { Controller, Get, Param, Query } from "@nestjs/common";
 import { HistoryQueryDto } from "./dto/history-query.dto";
 import { ReadingsService } from "./readings.service";
 
 @Controller("readings")
 export class ReadingsController {
-  constructor(private readonly readingsService: ReadingsService) {}
+  constructor(private readonly readingsService: ReadingsService, private readonly archive: ArchiveService) {}
+
+  @Get("archive/status")
+  archiveStatus() { return this.archive.status(); }
+
+  @Get("archive/dashboard")
+  archiveDashboard() { return this.archive.dashboard(); }
 
   @Get("latest")
   latest() {

@@ -1,3 +1,4 @@
+import { isModuleSource } from "./data-source";
 import { config } from "dotenv";
 import { resolve } from "node:path";
 
@@ -5,4 +6,4 @@ import { resolve } from "node:path";
 config({ path: resolve(__dirname, "../../../.env") });
 config();
 
-export const isFirebaseDataSource = process.env.DATA_SOURCE === "firebase";
+export const isModuleDataSource = isModuleSource(process.env.DATA_SOURCE);

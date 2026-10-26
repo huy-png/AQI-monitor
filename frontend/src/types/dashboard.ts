@@ -2,6 +2,7 @@ import type { ClimateReading, Device } from "@climasense/shared";
 
 export interface AlertItem {
   id: string;
+  metric?: string;
   severity: "info" | "warning" | "critical";
   title: string;
   message: string;

@@ -405,3 +405,53 @@ select:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+.air-section-heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.air-station-bar { padding: 1rem 1.25rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.pollutant-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.pollutant-grid-dust { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pollutant-card { padding: 1.25rem; border-top-width: 3px; min-width: 0; }
+.air-analysis-layout { display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); gap: 1rem; }
+.air-analysis-layout > * { min-width: 0; }
+.air-chart-empty { display: flex; min-height: 288px; align-items: center; justify-content: center; flex-direction: column; text-align: center; border: 1px dashed var(--glass-border); border-radius: 12px; padding: 1.5rem; background: var(--glass-bg-soft); }
+.air-data-notice { padding: 1rem; border: 1px solid var(--glass-border); border-radius: 12px; background: var(--glass-bg-soft); color: var(--text-muted); }
+.air-summary { margin: 1.25rem 0; }
+.air-summary > div { display: flex; justify-content: space-between; gap: 1rem; padding: .9rem 0; border-bottom: 1px solid var(--glass-border); }
+.air-summary dt { color: var(--text-muted); font-size: .875rem; }
+.air-summary dd { font-weight: 600; }
+.air-section-heading select { max-width: 100%; }
+@media (max-width: 1199px) {
+  .pollutant-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pollutant-grid-dust { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .air-analysis-layout { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 639px) {
+  .pollutant-grid, .pollutant-grid-dust { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+  .pollutant-card { padding: 1rem; }
+  .air-section-heading > label { width: 100%; }
+  .air-section-heading select { width: 100%; }
+  .air-station-bar > label { width: 100%; }
+}
+@media (max-width: 359px) {
+  .pollutant-grid, .pollutant-grid-dust { grid-template-columns: minmax(0, 1fr); }
+}
+.device-reading-grid { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+.device-reading-grid span { white-space: normal; overflow-wrap: anywhere; }
+@media (max-width: 1023px) {
+  .glass-sidebar { min-width: 0; }
+  .glass-sidebar > div:first-child { padding-top: .5rem; padding-bottom: .5rem; }
+  .glass-sidebar nav { display: flex; overflow-x: auto; gap: .5rem; margin-top: .75rem; padding-bottom: .4rem; }
+  .glass-sidebar .nav-link { flex: 0 0 auto; white-space: nowrap; min-height: 2.75rem; }
+  .glass-sidebar .location-card { display: none; }
+}
+
+.dashboard-controls { display: flex; flex-wrap: wrap; align-items: flex-start; gap: .75rem 1.25rem; }
+.dashboard-controls .device-select-label { flex-direction: row; align-items: center; }
+.dashboard-controls .device-select-label select { max-width: 100%; width: auto; }
+.metric-options { font-size: .875rem; max-width: 100%; }
+.metric-options summary { cursor: pointer; padding: .6rem .75rem; border: 1px solid var(--glass-border); border-radius: .5rem; }
+.metric-options-body { margin-top: .5rem; padding: 1rem; border: 1px solid var(--glass-border); border-radius: .5rem; }
+.metric-options-body button { color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; }
+.metric-option { display: inline-flex; align-items: center; gap: .5rem; margin: .35rem 1rem .35rem 0; cursor: pointer; }
+.metric-option input { width: 1rem; height: 1rem; accent-color: #0284c7; }
+.dashboard-controls :focus-visible { outline: 2px solid #0284c7; outline-offset: 3px; }
+

@@ -8,8 +8,9 @@ import { FirebaseModule } from "./firebase/firebase.module";
 import { MqttModule } from "./mqtt/mqtt.module";
 import { ReadingsModule } from "./readings/readings.module";
 import { RealtimeModule } from "./realtime/realtime.module";
-import { isFirebaseDataSource } from "./config/runtime";
+import "./config/runtime";
 import { resolve } from "node:path";
+import { PostgresStorageModule } from "./storage/storage.module";
 
 const persistenceModule = MongooseModule.forRootAsync({
   inject: [ConfigService],
@@ -23,7 +24,7 @@ const persistenceModule = MongooseModule.forRootAsync({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: [resolve(__dirname, "../../.env"), ".env"] }),
     FirebaseModule,
-    ...(isFirebaseDataSource ? [] : [persistenceModule]),
+    ...(process.env.STORAGE_DRIVER === "postgres" ? [PostgresStorageModule] : [persistenceModule]),
     RealtimeModule,
     DevicesModule,
     ReadingsModule,

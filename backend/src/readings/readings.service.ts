@@ -1,3 +1,5 @@
+import { isModuleSource } from "../config/data-source";
+import { ArchiveService } from "./archive.service";
 import { Injectable, NotFoundException, Optional, ServiceUnavailableException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/mongoose";
@@ -17,7 +19,8 @@ export class ReadingsService {
     private readonly devicesService: DevicesService,
     private readonly realtime: ClimateGateway,
     private readonly firebase: FirebaseRealtimeService,
-    private readonly config: ConfigService
+    private readonly config: ConfigService,
+    @Optional() private readonly archive?: ArchiveService
   ) {}
 
   async create(dto: CreateReadingDto): Promise<ClimateReading> {
@@ -36,7 +39,7 @@ export class ReadingsService {
   }
 
   async latest(deviceId?: string): Promise<ClimateReading> {
-    if (this.config.get<string>("DATA_SOURCE", "mongodb") === "firebase") {
+    if (isModuleSource(this.config.get<string>("DATA_SOURCE", "mongodb"))) {
       return this.firebase.getLatest(deviceId);
     }
     if (!this.readingModel) throw new ServiceUnavailableException("MongoDB model is not available");
@@ -47,8 +50,9 @@ export class ReadingsService {
   }
 
   async history(deviceId: string, query: HistoryQueryDto): Promise<ClimateReading[]> {
-    if (this.config.get<string>("DATA_SOURCE", "mongodb") === "firebase") {
-      return this.firebase.getHistory(deviceId);
+    if (isModuleSource(this.config.get<string>("DATA_SOURCE", "mongodb"))) {
+      if (!this.archive) throw new ServiceUnavailableException("History archive is unavailable");
+      return await this.archive.history(deviceId, query) as unknown as ClimateReading[];
     }
     if (!this.readingModel) throw new ServiceUnavailableException("MongoDB model is not available");
     const filter: Record<string, unknown> = { deviceId };
@@ -65,15 +69,15 @@ export class ReadingsService {
   async summary(deviceId: string, query: HistoryQueryDto): Promise<ReadingSummary> {
     const history = await this.history(deviceId, { ...query, limit: query.limit ?? 1000 });
     if (history.length === 0) throw new NotFoundException("No readings for summary");
-    const temperatures = history.map((reading) => reading.temperature);
-    const humidities = history.map((reading) => reading.humidity);
+    const temperatures = history.map((reading) => reading.temperature).filter(value => typeof value === "number" && Number.isFinite(value));
+    const humidities = history.map((reading) => reading.humidity).filter(value => typeof value === "number" && Number.isFinite(value));
 
     return {
-      minTemperature: Math.min(...temperatures),
-      maxTemperature: Math.max(...temperatures),
+      minTemperature: temperatures.length ? Math.min(...temperatures) : Number.NaN,
+      maxTemperature: temperatures.length ? Math.max(...temperatures) : Number.NaN,
       avgTemperature: this.average(temperatures),
       avgHumidity: this.average(humidities),
-      totalRainfall: history.reduce((total, reading) => total + reading.rainfall, 0),
+      totalRainfall: history.reduce((total, reading) => total + (reading.rainfall ?? 0), 0),
       maxWindSpeed: Math.max(...history.map((reading) => reading.windSpeed))
     };
   }

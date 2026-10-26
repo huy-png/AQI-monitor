@@ -40,6 +40,26 @@ export function useDashboardData(range: "24h" | "7d" | "30d") {
   useEffect(() => {
     let mounted = true;
 
+    if (dataSource === "api") {
+      let timer: number;
+      const refresh = async () => {
+        try {
+          const data = await loadDashboardData();
+          if (mounted) setState({ data, isLoading: false, error: null });
+        } catch {
+          if (mounted) setState(current => ({
+            ...current, isLoading: false,
+            data: current.data ? { ...current.data, connected: false } : null,
+            error: "Không kết nối được máy chủ. Hãy kiểm tra kết nối tới server."
+          }));
+        } finally {
+          if (mounted) timer = window.setTimeout(() => void refresh(), 5000);
+        }
+      };
+      void refresh();
+      return () => { mounted = false; window.clearTimeout(timer); };
+    }
+
     loadDashboardData()
       .then((data) => {
         if (mounted) {

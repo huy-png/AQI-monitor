@@ -3,6 +3,14 @@ dist
 coverage
 .env
 .env.local
+.env.server
+.env.postgres
 .npm-cache
 .DS_Store
 npm-debug.log*
+
+# Local database and process logs
+.local/
+
+dist-cjs/
+shared/tsconfig.cjs.tsbuildinfo

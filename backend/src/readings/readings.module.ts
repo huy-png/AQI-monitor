@@ -6,16 +6,17 @@ import { ReadingAdapter } from "./reading.adapter";
 import { ReadingsController } from "./readings.controller";
 import { ReadingsService } from "./readings.service";
 import { ReadingModel, ReadingSchema } from "./schemas/reading.schema";
-import { isFirebaseDataSource } from "../config/runtime";
+import { ArchiveService } from "./archive.service";
+import { isModuleDataSource } from "../config/runtime";
 
 @Module({
   imports: [
-    ...(isFirebaseDataSource ? [] : [MongooseModule.forFeature([{ name: ReadingModel.name, schema: ReadingSchema }])]),
+    ...(isModuleDataSource ? [] : [MongooseModule.forFeature([{ name: ReadingModel.name, schema: ReadingSchema }])]),
     DevicesModule,
     RealtimeModule
   ],
   controllers: [ReadingsController],
-  providers: [ReadingsService, ReadingAdapter],
+  providers: [ReadingsService, ReadingAdapter, ArchiveService],
   exports: [ReadingsService, ReadingAdapter]
 })
 export class ReadingsModule {}

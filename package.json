@@ -8,6 +8,7 @@
     "shared"
   ],
   "scripts": {
+    "connect:server": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/connect-server.ps1",
     "build": "npm -w @climasense/shared run build && npm -w @climasense/frontend run build && npm -w @climasense/backend run build",
     "test": "npm -w @climasense/backend test",
     "lint": "npm -w @climasense/frontend run lint && npm -w @climasense/backend run lint",

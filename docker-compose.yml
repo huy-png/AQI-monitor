@@ -31,11 +31,15 @@ services:
     ports:
       - "3000:3000"
     environment:
+      HOST: 0.0.0.0
       PORT: 3000
       MONGODB_URI: mongodb://mongodb:27017/climasense
       MQTT_URL: mqtt://mosquitto:1883
       DATA_SOURCE: ${DATA_SOURCE:-mongodb}
       FIREBASE_DATABASE_URL: ${FIREBASE_DATABASE_URL:-}
+      FIREBASE_API_KEY: ${FIREBASE_API_KEY:-}
+      FIREBASE_AUTH_EMAIL: ${FIREBASE_AUTH_EMAIL:-}
+      FIREBASE_AUTH_PASSWORD: ${FIREBASE_AUTH_PASSWORD:-}
       FIREBASE_DATABASE_AUTH: ${FIREBASE_DATABASE_AUTH:-}
       FRONTEND_URL: http://localhost:5173
       JWT_SECRET: replace_me

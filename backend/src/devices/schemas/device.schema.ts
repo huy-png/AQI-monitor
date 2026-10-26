@@ -15,7 +15,7 @@ export class DeviceModel {
   @Prop({ required: true })
   location!: string;
 
-  @Prop({ required: true, enum: ["online", "offline", "warning"], default: "offline" })
+  @Prop({ type: String, required: true, enum: ["online", "offline", "warning"], default: "offline" })
   status!: DeviceStatus;
 
   @Prop({ required: true })

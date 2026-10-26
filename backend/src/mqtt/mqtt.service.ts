@@ -1,3 +1,4 @@
+import { isModuleSource } from "../config/data-source";
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { ModuleRef } from "@nestjs/core";
@@ -20,8 +21,8 @@ export class MqttService implements OnModuleInit, OnModuleDestroy {
   ) {}
 
   onModuleInit() {
-    if (this.config.get<string>("DATA_SOURCE", "mongodb") === "firebase") {
-      this.logger.log("Firebase data source enabled; MQTT bridge is disabled.");
+    if (isModuleSource(this.config.get<string>("DATA_SOURCE", "mongodb"))) {
+      this.logger.log("Module data source enabled; MQTT bridge is disabled.");
       return;
     }
     this.readingsService = this.moduleRef.get(ReadingsService, { strict: false });

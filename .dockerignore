@@ -1,0 +1,17 @@
+**/node_modules
+**/dist
+**/dist-cjs
+**/*.tsbuildinfo
+**/.env
+**/.env.*
+.git
+.local
+firmware
+docs/screenshots
+**/coverage
+**/*.pem
+**/*.key
+migration
+backups
+build.log
+source.tar.gz

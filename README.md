@@ -210,3 +210,39 @@ Test hiện có cho adapter chuẩn hóa payload và summary của readings serv
 ## Ghi chú bảo mật
 
 Không commit `.env`, mật khẩu MQTT, token hoặc khóa thật. Các giá trị trong `.env.example` và `docker-compose.yml` chỉ là mẫu phát triển cục bộ.
+
+## Giao diện quan trắc không khí
+
+Dashboard, phân tích, bảng bản ghi, bản đồ và CSV hiển thị bộ thông số
+SO₂, CO, NO₂, O₃, TSP, PM10, PM2.5. Nhóm khí và nhóm bụi được trình bày riêng.
+Thông số vắng mặt, null, không hợp lệ hoặc âm hiển thị dấu —; giá trị 0 vẫn là dữ liệu hợp lệ.
+Giao diện chưa tự kết luận đạt/vượt quy chuẩn và không quy đổi PM2.5 thành AQI.
+
+Adapter Firebase phía frontend đã chuẩn bị các trường tùy chọn trong bản ghi latest:
+`so2`, `co`, `no2`, `o3`, `tsp`, `pm10`, `pm25` (chấp nhận tên viết hoa;
+PM2.5 còn nhận `pm2_5`, `pm2.5`, `pm_25`).
+Đơn vị hiển thị dự kiến: µg/Nm³. Payload cần được thống nhất về đơn vị trước khi kết nối
+dữ liệu mới; frontend không tự chuyển đổi ppm, ppb hoặc điều kiện thể tích khí.
+Chưa thay đổi dữ liệu/cấu hình Firebase hoặc luồng lưu trữ backend.
+CSV để trống ô chưa có dữ liệu. Dashboard vẫn hiển thị đủ 7 ô khi chưa nhận được bản ghi.
+
+## Lưu lịch sử Firebase vào MongoDB
+
+Backend nhận số đo Firebase và lưu lịch sử cục bộ; web đọc lịch sử qua API. Xem [hướng dẫn cấu hình và vận hành](docs/firebase-history.md).
+
+## Xem dữ liệu từ server Ubuntu trên laptop
+
+Server Ubuntu hiện lưu dữ liệu bằng PostgreSQL. Khi frontend dùng
+`VITE_API_URL=http://localhost:3001/api`, mở một terminal tại thư mục dự án và chạy:
+
+```powershell
+npm run connect:server
+```
+
+Đăng nhập SSH khi được yêu cầu và giữ terminal này mở trong lúc xem lịch sử,
+báo cáo hoặc cảnh báo. Chạy `npm run dev:frontend` ở terminal khác.
+Sau khi đóng SSH hoặc khởi động lại laptop, cần chạy lại lệnh kết nối.
+Web tự thử tải lại khi kết nối phục hồi. Server vẫn tiếp tục thu thập và lưu dữ liệu
+khi laptop tắt; đường SSH chỉ phục vụ việc truy cập API từ laptop.
+
+Kiểm tra kết nối bằng `curl.exe http://localhost:3001/api/health`.

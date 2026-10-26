@@ -1,0 +1,30 @@
+Create a Vietnamese text-only academic workflow infographic for the ClimaSense graduation project, matching this precise template: portrait-ish canvas approximately 1000x1100, white background, top left bold title, a thin dashed input rectangle, SIX broad rounded rectangles stacked vertically, each with a separate numbered downward-pointing pentagonal tab on its left, then a thin dashed output rectangle at bottom. Soft pastel fills in order light blue, peach, mint, blue-gray, pink, pale green; fine matching darker borders. Black/dark gray sans-serif text with perfect Vietnamese diacritics, centered inside rows. Small simple gray connector arrows only. This is the RESEARCH AND DEVELOPMENT WORKFLOW of the project, following the user's research-process template, not a hardware architecture picture.
+STRICTLY TEXT AND GEOMETRIC FRAMES ONLY. No illustrations, no photos, no icons, no logos, no electronics drawings, no charts. No decorative graphics other than rectangular frames, numbered tabs and simple arrows. Large readable text, balanced generous spacing. All text below must appear verbatim.
+Title: "Quy trình thực hiện đồ án ClimaSense"
+Input dashed box: "ĐẦU VÀO: Yêu cầu đề tài · ESP32-S3 · BME280 · PMS7003 · GPS NEO-6M"
+Row numbered 1:
+bold "Xác định vấn đề và mục tiêu"
+"Nghiên cứu hệ thống IoT giám sát môi trường kèm vị trí"
+"Xác định phạm vi, yêu cầu chức năng và tiêu chí đánh giá"
+Row numbered 2:
+bold "Tổng quan tài liệu và cơ sở lý thuyết"
+"Tìm hiểu cảm biến, ESP32-S3, giao tiếp I2C và UART"
+"Nghiên cứu truyền dữ liệu, lưu trữ và dashboard giám sát"
+Row numbered 3:
+bold "Thu thập và xử lý dữ liệu"
+"Đo nhiệt độ, độ ẩm, áp suất, bụi PM và tọa độ GPS"
+"Kiểm tra dữ liệu hợp lệ, chuẩn hóa đơn vị và gắn thời gian"
+Row numbered 4:
+bold "Thiết kế và xây dựng hệ thống"
+"Lập trình ESP32-S3 bằng PlatformIO · Tích hợp truyền và lưu dữ liệu"
+"Xây dựng dashboard: số đo, biểu đồ, lịch sử và bản đồ"
+Row numbered 5:
+bold "Thực nghiệm và đánh giá"
+"Kiểm thử cảm biến, kết nối và hoạt động toàn hệ thống"
+"Đánh giá độ ổn định, độ trễ và tỷ lệ nhận dữ liệu"
+Row numbered 6:
+bold "Kết luận và hoàn thiện báo cáo"
+"Đối chiếu kết quả với mục tiêu đã đặt ra"
+"Nêu hạn chế, hướng phát triển và hoàn thiện báo cáo đồ án"
+Output dashed box: "ĐẦU RA: Hệ thống ClimaSense · Kết quả thực nghiệm · Báo cáo đồ án"
+Do not add any text beyond the provided text. Keep every line inside its frame. This is a planned workflow, not a claim that the implementation is completed. Render as a clean high resolution publication-ready infographic.

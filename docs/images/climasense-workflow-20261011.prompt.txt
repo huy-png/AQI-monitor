@@ -1,0 +1,16 @@
+Use case: infographic-diagram.
+Create a polished Vietnamese infographic image for a university graduation project, landscape aspect ratio, white background, navy typography, soft blue and teal panels, crisp professional line icons and subtle realistic miniature sensor illustrations. Title exactly "CLIMASENSE"; subtitle "Workflow hệ thống giám sát môi trường IoT"; smaller label "Sơ đồ tổng thể đề xuất". Legible correctly accented Vietnamese. Clear directional arrows, no crossing arrows, generous whitespace.
+Layout: three sensor cards in a left column converge into ESP32-S3 central processing card; then a data transmission and storage column; then dashboard right column. Lower narrow strip for the operational cycle.
+Left cards text:
+"BME280" / "Nhiệt độ • Độ ẩm • Áp suất" / "I2C: SDA GPIO9 • SCL GPIO8"
+"PMS7003" / "Bụi PM1.0 • PM2.5 • PM10" / "UART: TX → GPIO17 • RX ← GPIO18"
+"GPS NEO-6M" / "Vĩ độ • Kinh độ" / "UART: TX → GPIO15 • RX ← GPIO16"
+Small caption below sensor group "Các module dùng chung GND".
+Central card heading "ESP32-S3"; lines "Đọc dữ liệu cảm biến", "Kiểm tra dữ liệu hợp lệ", "Gắn thời gian và mã thiết bị". Small attached serial monitor box connected by branch "Serial Monitor" / "Số đo • Trạng thái kết nối".
+Arrow out of central card labelled "Wi-Fi" leading to two ALTERNATIVE routes within one pale cloud panel with title "Chọn một luồng dữ liệu":
+route A "Firebase Realtime Database"
+route B "MQTT → NestJS → MongoDB"
+Both routes converge to right card "Dashboard React" with four icon rows "Theo dõi trực tiếp", "Biểu đồ và lịch sử", "Bản đồ vị trí", "Cảnh báo theo ngưỡng".
+Bottom strip heading "CHU TRÌNH HOẠT ĐỘNG", connected short steps "Khởi tạo → Đọc cảm biến → Kiểm tra → Gửi dữ liệu → Hiển thị → Lặp lại".
+Footer note exactly "Firmware hiện tại: kiểm thử cảm biến và hiển thị Serial. Luồng truyền dữ liệu là phần tích hợp tiếp theo."
+Keep this technically faithful: Firebase and MQTT/NestJS/MongoDB are alternatives, not sequential storage. No wind or rain sensor, no AI prediction, no fabricated test results. Beautiful academic figure with large readable text, flat orthographic cards, restrained color accents, no watermark.

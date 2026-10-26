@@ -9,8 +9,9 @@ async function bootstrap() {
   const config = app.get(ConfigService);
   const frontendUrl = config.get<string>("FRONTEND_URL", "http://localhost:5173");
 
+  app.enableShutdownHooks();
   app.setGlobalPrefix("api");
-  app.enableCors({ origin: frontendUrl, credentials: true });
+  app.enableCors({ origin: frontendUrl.split(",").map(value => value.trim()), credentials: true });
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(
     new ValidationPipe({
@@ -21,7 +22,7 @@ async function bootstrap() {
   );
 
   const port = config.get<number>("PORT", 3000);
-  await app.listen(port);
+  await app.listen(port, config.get<string>("HOST", "127.0.0.1"));
 }
 
 void bootstrap();

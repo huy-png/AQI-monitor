@@ -1,9 +1,8 @@
 import axios from "axios";
-import { io } from "socket.io-client";
 import type { ClimateReading, Device } from "@climasense/shared";
 import { env } from "../config/env";
 import { mockAlerts, mockDevices, mockHistory } from "./mockData";
-import { loadFirebaseDashboardData, loadFirebaseDevices, loadFirebaseReportReadings, subscribeToFirebaseReadings } from "./firebase";
+import { loadFirebaseDashboardData, loadFirebaseDevices, subscribeToFirebaseReadings } from "./firebase";
 import { getRuntimeDataSource } from "./dataSource";
 import type { AlertItem, DashboardData } from "../types/dashboard";
 
@@ -35,39 +34,34 @@ export async function loadDashboardData(): Promise<DashboardData> {
     return loadFirebaseDashboardData();
   }
 
-  const [latest, history, devices, alerts] = await Promise.all([
-    api.get<ClimateReading>("/readings/latest"),
-    api.get<ClimateReading[]>("/readings/esp32-garden-01/history", { params: { interval: "1h", limit: 24 } }),
-    api.get<Device[]>("/devices"),
-    api.get<AlertItem[]>("/alerts")
-  ]);
-
-  return {
-    stationName: "Vườn thông minh",
-    location: "Đà Lạt",
-    latest: latest.data,
-    deviceReadings: { [latest.data.deviceId]: latest.data },
-    history: history.data,
-    devices: devices.data,
-    alerts: alerts.data,
-    connected: true,
-    lastUpdated: latest.data.timestamp
-  };
+  return (await api.get<DashboardData>("/readings/archive/dashboard")).data;
 }
 
-export async function loadReportReadings(deviceIds: string[]): Promise<ClimateReading[]> {
+export async function loadReportReadings(deviceIds: string[], range: { from?: string; to?: string } = {}, archiveOnly = false): Promise<ClimateReading[]> {
   const dataSource = getRuntimeDataSource();
-  if (dataSource === "firebase") return loadFirebaseReportReadings(deviceIds);
-  if (dataSource === "mock") return mockHistory.filter((reading) => deviceIds.includes(reading.deviceId));
+  if (!archiveOnly && dataSource === "mock") return mockHistory.filter((reading) => deviceIds.includes(reading.deviceId));
 
-  const responses = await Promise.all(
-    deviceIds.map((deviceId) => api.get<ClimateReading[]>(`/readings/${deviceId}/history`, { params: { interval: "1h", limit: 2000 } }))
-  );
-  return responses.flatMap((response) => response.data).sort((first, second) => Date.parse(first.timestamp) - Date.parse(second.timestamp));
+  const results = await Promise.all(deviceIds.map(async deviceId => {
+    const rows: ClimateReading[] = [];
+    let before: string | undefined;
+    do {
+      const response = await api.get<(ClimateReading & { id?: string })[]>(`/readings/${encodeURIComponent(deviceId)}/history`, { params: { ...range, limit: 1000, before } });
+      rows.push(...response.data);
+      const next = response.data.at(-1)?.id;
+      if (response.data.length < 1000 || !next || next === before) break;
+      before = next;
+    } while (before);
+    return rows;
+  }));
+  return results.flat().sort((a, b) => Date.parse(a.timestamp) - Date.parse(b.timestamp));
 }
 
 export async function scanFirebaseDevices(): Promise<Device[]> {
   return loadFirebaseDevices();
+}
+
+export async function loadArchiveDashboard(): Promise<DashboardData> {
+  return (await api.get<DashboardData>("/readings/archive/dashboard")).data;
 }
 
 export function subscribeToReadings(onReading: (reading: ClimateReading) => void, onDisconnect: () => void, onDevicesChanged?: (devices: Device[]) => void) {
@@ -81,14 +75,31 @@ export function subscribeToReadings(onReading: (reading: ClimateReading) => void
     return () => undefined;
   }
 
-  const socket = io(env.socketUrl, {
-    transports: ["websocket"],
-    reconnectionAttempts: Infinity,
-    reconnectionDelay: 1000
-  });
+  return () => undefined;
+}
 
-  socket.on("reading:new", onReading);
-  socket.on("disconnect", onDisconnect);
+export async function loadEnvironmentalAlerts(): Promise<AlertItem[]> {
+  return (await api.get<AlertItem[]>("/alerts")).data;
+}
 
-  return () => socket.close();
+export async function loadMonitoringHealth() {
+  const [health, archive] = await Promise.allSettled([
+    api.get<{ status: string; postgresql?: string; mongodb?: string }>("/health"),
+    api.get<{ connected: boolean; pendingDevices: number; lastSavedAt: string | null; error: string | null; lastSnapshotAt?: string | null; lastVerifiedAt?: string | null; recoveryCount?: number }>("/readings/archive/status")
+  ]);
+  return {
+    api: health.status === "fulfilled" || archive.status === "fulfilled",
+    database: health.status === "fulfilled" ? (health.value.data.postgresql ?? health.value.data.mongodb) === "connected" : null,
+    collector: archive.status === "fulfilled" ? archive.value.data : null,
+    checkedAt: new Date().toISOString()
+  };
+}
+export async function readEnvironmentalAlert(id: string) {
+  await api.patch(`/alerts/${encodeURIComponent(id)}/read`);
+}
+export async function loadAlertSettings(): Promise<import("@climasense/shared").AlertSettings> {
+  return (await api.get("/alerts/settings")).data;
+}
+export async function saveAlertSettings(settings: import("@climasense/shared").AlertSettings) {
+  return (await api.put("/alerts/settings", settings)).data;
 }

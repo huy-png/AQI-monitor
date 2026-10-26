@@ -1,0 +1,277 @@
+/* Shared material layer. Layout and data visualization remain in their own styles. */
+:root {
+  --theme-tint: #38bda9;
+  --page-bg: #081522;
+  --text-primary: #edf6ff;
+  --text-muted: #bed0df;
+  --text-subtle: #a1b8cb;
+  --accent: color-mix(in srgb, var(--theme-tint) 45%, #fff);
+  --accent-soft: color-mix(in srgb, var(--theme-tint) 14%, transparent);
+  --glass-bg: rgba(22, 46, 65, .62);
+  --glass-bg-strong: rgba(16, 35, 51, .9);
+  --glass-bg-soft: rgba(179, 221, 248, .065);
+  --glass-border: rgba(190, 225, 247, .19);
+  --glass-highlight: rgba(224, 245, 255, .24);
+  --glass-shadow: 0 12px 36px -14px rgba(0, 6, 16, .55), inset 0 1px 0 var(--glass-highlight), inset 0 -1px 0 rgba(255, 255, 255, .035);
+  --glass-shadow-soft: 0 5px 16px -8px rgba(0, 6, 16, .4), inset 0 1px 0 var(--glass-highlight);
+  --glass-sheen: linear-gradient(135deg, rgba(215, 242, 255, .09), transparent 42%, rgba(177, 219, 255, .025));
+  --glass-opaque: #142c3e;
+  --glass-blur: 22px;
+  --chart-grid: rgba(185, 217, 239, .14);
+  --tooltip-bg: #152c3e;
+}
+
+:root[data-theme="light"] {
+  --page-bg: #e1eaf3;
+  --text-primary: #193349;
+  --text-muted: #405c71;
+  --text-subtle: #526c7f;
+  --accent: color-mix(in srgb, var(--theme-tint) 40%, #102b3c);
+  --accent-soft: color-mix(in srgb, var(--theme-tint) 14%, transparent);
+  --glass-bg: rgba(255, 255, 255, .32);
+  --glass-bg-strong: rgba(247, 252, 255, .94);
+  --glass-bg-soft: rgba(255, 255, 255, .24);
+  --glass-border: rgba(255, 255, 255, .86);
+  --glass-highlight: rgba(255, 255, 255, .96);
+  --glass-shadow: 0 16px 40px -18px rgba(43, 78, 106, .32), 0 2px 6px rgba(43, 78, 106, .04), inset 0 2px 1px var(--glass-highlight), inset 1px 0 0 rgba(255, 255, 255, .6), inset 0 -1px 0 rgba(255, 255, 255, .45);
+  --glass-shadow-soft: 0 5px 18px -10px rgba(43, 78, 106, .24), inset 0 1px 0 var(--glass-highlight);
+  --glass-sheen: linear-gradient(125deg, rgba(255, 255, 255, .68), rgba(255, 255, 255, .06) 30%, transparent 55%, rgba(255, 255, 255, .26));
+  --glass-opaque: #f1f7fb;
+  --chart-grid: rgba(43, 78, 106, .14);
+  --tooltip-bg: #f7fbff;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 12% 4%, color-mix(in srgb, var(--theme-tint) 32%, #0b2133) 0, transparent 46%),
+    radial-gradient(ellipse at 90% 35%, #243959 0, transparent 48%),
+    radial-gradient(ellipse at 45% 100%, color-mix(in srgb, var(--theme-tint) 22%, #102432) 0, transparent 52%),
+    var(--page-bg);
+  background-attachment: fixed;
+}
+:root[data-theme="light"] body {
+  background:
+    radial-gradient(ellipse at 4% 6%, color-mix(in srgb, var(--theme-tint) 48%, #e6f3f9) 0, transparent 48%),
+    radial-gradient(ellipse at 95% 18%, #b9c9ee 0, transparent 43%),
+    radial-gradient(ellipse at 60% 85%, color-mix(in srgb, var(--theme-tint) 30%, #e6e3fa) 0, transparent 46%),
+    var(--page-bg);
+  background-attachment: fixed;
+}
+.monitor-shell-flat {
+  /* Contain the first alert's top margin so it cannot shift the body background. */
+  display: flow-root;
+  background: transparent;
+}
+.monitor-dashboard,
+:root[data-theme="light"] .monitor-dashboard {
+  --monitor-surface: var(--glass-bg-strong);
+  --monitor-line: var(--glass-border);
+  --monitor-accent: var(--accent);
+}
+
+/* A floating navigation rail with a single blur layer. */
+.monitor-shell-flat .monitor-sidebar {
+  inset: 16px auto 16px 16px;
+  width: 232px;
+  height: calc(100dvh - 32px);
+  border: 1px solid var(--glass-border);
+  border-radius: 26px;
+  background: var(--glass-sheen), var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(140%);
+}
+.monitor-shell-flat .monitor-main { margin-left: 264px; }
+.monitor-shell .nav-link {
+  border: 1px solid transparent;
+  border-radius: 14px;
+  min-height: 46px;
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+.monitor-shell .nav-link:hover { background: var(--glass-bg-soft); color: var(--text-primary); }
+.monitor-shell .nav-link.is-active {
+  color: var(--accent);
+  border: 1px solid var(--glass-border);
+  background: var(--glass-sheen), var(--accent-soft);
+  box-shadow: var(--glass-shadow-soft);
+}
+.monitor-sidebar .brand-mark {
+  border: 1px solid var(--glass-border);
+  border-radius: 15px;
+  background: var(--glass-sheen), var(--accent-soft);
+  box-shadow: var(--glass-shadow-soft);
+}
+.monitor-sidebar .text-cyanCore { color: var(--accent); }
+.monitor-sidebar .location-card {
+  border-radius: 16px;
+  background: var(--glass-bg-soft);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+}
+.monitor-sidebar .location-card svg { color: var(--accent); }
+
+.theme-color-editor { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--glass-border); }
+.theme-color-description h3 { font-size: 14px; font-weight: 600; }
+.theme-color-description p, .theme-color-note { color: var(--text-muted); font-size: 12px; line-height: 1.7; margin-top: 6px; }
+.theme-color-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 20px 32px; margin: 20px 0; }
+.theme-color-well { display: flex; align-items: center; gap: 12px; cursor: pointer; font-size: 12px; }
+.theme-color-well input { width: 56px; height: 56px; padding: 4px; border: 1px solid var(--glass-border); border-radius: 15px; background: var(--glass-bg-soft); cursor: pointer; }
+.theme-color-well input::-webkit-color-swatch-wrapper { padding: 0; }
+.theme-color-well input::-webkit-color-swatch { border: 0; border-radius: 10px; }
+.theme-color-well input::-moz-color-swatch { border: 0; border-radius: 10px; }
+.theme-color-well strong { display: block; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.theme-rgb { display: flex; gap: 10px; min-width: 0; }
+.theme-rgb legend { font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
+.theme-rgb label { display: flex; align-items: center; gap: 7px; font-size: 12px; }
+.theme-rgb input { width: 72px; min-height: 42px; padding: 8px; border-radius: 10px; border: 1px solid var(--glass-border); background: var(--glass-bg-strong); color: var(--text-primary); font-variant-numeric: tabular-nums; }
+.theme-color-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.theme-color-presets button { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 12px; border: 1px solid var(--glass-border); border-radius: 12px; background: var(--glass-bg-soft); font-size: 12px; }
+.theme-color-presets button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.theme-color-presets i { width: 16px; height: 16px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .15); }
+.theme-color-presets .theme-color-reset { color: var(--accent); }
+.theme-color-note { margin-top: 14px; }
+@media (max-width: 400px) {
+  .theme-rgb { gap: 8px; width: 100%; }
+  .theme-rgb label { flex: 1; flex-direction: column; align-items: start; min-width: 0; }
+  .theme-rgb input { width: 100%; }
+}
+
+/* Top-level panels receive the material; nested rows stay crisp and inexpensive. */
+.monitor-dashboard .monitor-box,
+.monitor-dashboard .monitor-chart,
+.monitor-dashboard .monitor-empty,
+.monitor-dashboard .monitor-metric,
+.monitor-subpage .glass-card,
+.monitor-subpage .glass-panel,
+.monitor-summary-row article {
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  background: var(--glass-sheen), var(--glass-bg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur)) saturate(135%);
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(135%);
+}
+.monitor-dashboard .monitor-metric {
+  padding: 20px;
+  border-radius: 20px;
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.monitor-dashboard .monitor-metric.is-active {
+  border-color: color-mix(in srgb, var(--accent) 65%, var(--glass-border));
+  background: var(--glass-sheen), color-mix(in srgb, var(--accent-soft) 25%, var(--glass-bg));
+  box-shadow: var(--glass-shadow), inset 0 3px 0 var(--accent);
+}
+.monitor-metric-grid { gap: 14px; }
+.monitor-metric-value { margin: 22px 0 16px; font-size: 34px; }
+.monitor-metric-bottom, .monitor-footnote, .monitor-footer { font-size: 12px; }
+.monitor-kicker { font-size: 11px; }
+.monitor-heading h1, .monitor-subpage .page-title { font-weight: 700; }
+.monitor-box-heading h2 { font-size: 14px; }
+.monitor-source { border-radius: 99px; background: var(--glass-bg-soft); padding: 9px 13px; }
+.monitor-toolbar { align-items: center; }
+.monitor-dashboard .monitor-box { padding: 22px; }
+.monitor-meter { height: 6px; }
+.monitor-meter i { background: linear-gradient(90deg, var(--accent), #46b8ce); border-radius: inherit; }
+.monitor-groups small, .monitor-coordinates span { font-size: 11px; }
+
+/* Solid-enough controls and popovers prevent text from blending into charts. */
+.monitor-device select,
+.monitor-options summary,
+.monitor-filter-row input,
+.monitor-filter-row select,
+.monitor-subpage .glass-select,
+.monitor-subpage input[type="date"],
+.monitor-subpage .theme-switch,
+.report-device-picker > summary,
+.map-device-search input {
+  border-radius: 12px;
+  border-color: var(--glass-border);
+  background: var(--glass-bg-soft);
+  box-shadow: inset 0 1px 0 var(--glass-highlight);
+  min-height: 42px;
+}
+.monitor-options fieldset,
+.report-device-menu {
+  border-radius: 18px;
+  background: var(--glass-bg-strong);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+}
+.monitor-options[open] { z-index: 20; }
+.monitor-subpage .report-filters:has(.report-device-picker[open]) {
+  position: relative;
+  z-index: 20;
+}
+.monitor-dashboard select option { background: var(--glass-opaque); color: var(--text-primary); }
+.monitor-subpage .primary-glass-button,
+.monitor-subpage .theme-switch button,
+.monitor-period,
+.monitor-period button { border-radius: 12px; }
+.monitor-subpage .primary-glass-button {
+  background: var(--glass-sheen), var(--accent-soft);
+  box-shadow: var(--glass-shadow-soft);
+  min-height: 42px;
+}
+.monitor-period button { min-height: 32px; }
+.monitor-subpage .data-table th { background: var(--glass-bg-soft); }
+.monitor-network thead { background: var(--glass-bg-soft); }
+.monitor-network table, .monitor-subpage .data-table { border-radius: 12px; overflow: hidden; }
+.monitor-subpage .data-table td { padding-top: 16px; padding-bottom: 16px; }
+.monitor-network td button { border-radius: 10px; min-width: 38px; min-height: 38px; }
+.monitor-subpage .summary-grid, .monitor-subpage .scan-result-panel,
+.monitor-subpage .alert-card, .map-device-option { border-radius: 14px; background: var(--glass-bg-soft); }
+.environment-alert-banner {
+  margin: 16px 32px 0;
+  padding: 12px 18px;
+  border: 1px solid rgba(245, 158, 11, .32);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--glass-bg-strong) 90%, #f59e0b);
+}
+.monitor-main-map > .environment-alert-banner { margin: 12px; }
+.map-workspace > .page-heading { background: var(--glass-bg); }
+.map-workspace .map-detail {
+  background: var(--glass-sheen), var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+.map-controls, .map-compass { border-radius: 14px; background: var(--glass-bg-strong); }
+.monitor-shell :is(button, a, select, input, summary):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+@media (hover: hover) {
+  .monitor-dashboard .monitor-metric:hover {
+    border-color: var(--accent);
+    background: var(--glass-sheen), color-mix(in srgb, var(--glass-bg) 85%, var(--accent-soft));
+  }
+}
+@media (max-width: 1023px) {
+  :root { --glass-blur: 14px; }
+  .monitor-shell-flat .monitor-sidebar {
+    position: sticky;
+    inset: 0;
+    width: 100%;
+    height: auto;
+    border-radius: 0 0 22px 22px;
+    background: var(--glass-sheen), var(--glass-bg-strong);
+  }
+  .monitor-shell-flat .monitor-main { margin-left: 0; }
+  .monitor-shell .glass-sidebar .nav-link { font-size: 13px; }
+}
+@media (max-width: 640px) {
+  .monitor-dashboard .monitor-metric { padding: 16px; }
+  .monitor-metric-grid { gap: 10px; }
+  .monitor-metric-value { font-size: 30px; }
+  .monitor-dashboard .monitor-box { padding: 18px; }
+  .environment-alert-banner { margin: 12px 16px 0; }
+  .monitor-source { white-space: normal; text-align: center; }
+}
+/* Keep a readable material when blur is unavailable or transparency is reduced. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :root, :root[data-theme="light"] { --glass-bg: var(--glass-opaque); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root, :root[data-theme="light"] { --glass-bg: var(--glass-opaque); --glass-bg-strong: var(--glass-opaque); --glass-blur: 0px; }
+}

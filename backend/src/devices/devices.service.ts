@@ -1,3 +1,4 @@
+import { isModuleSource } from "../config/data-source";
 import { Injectable, NotFoundException, Optional, ServiceUnavailableException } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { InjectModel } from "@nestjs/mongoose";
@@ -17,14 +18,14 @@ export class DevicesService {
   ) {}
 
   async findAll(): Promise<Device[]> {
-    if (this.config.get<string>("DATA_SOURCE", "mongodb") === "firebase") return this.firebase.findDevices();
+    if (isModuleSource(this.config.get<string>("DATA_SOURCE", "mongodb"))) return this.firebase.findDevices();
     if (!this.deviceModel) throw new ServiceUnavailableException("MongoDB model is not available");
     const devices = await this.deviceModel.find().sort({ name: 1 }).lean();
     return devices.map(this.toDevice);
   }
 
   async findOne(deviceId: string): Promise<Device> {
-    if (this.config.get<string>("DATA_SOURCE", "mongodb") === "firebase") {
+    if (isModuleSource(this.config.get<string>("DATA_SOURCE", "mongodb"))) {
       const device = (await this.firebase.findDevices()).find((item) => item.deviceId === deviceId);
       if (!device) throw new NotFoundException(`Device ${deviceId} not found`);
       return device;

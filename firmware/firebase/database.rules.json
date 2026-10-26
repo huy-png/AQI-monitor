@@ -1,0 +1,61 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "devices": {
+      ".read": "auth != null && auth.token.email != null && auth.token.email.matches(/^esp[^@]*@gmail[.]com$/)",
+      "$deviceId": {
+        "latest": {
+          ".write": "auth != null && auth.token.email != null && auth.token.email.matches(/^esp[^@]*@gmail[.]com$/)",
+          ".validate": "newData.hasChildren() && (!newData.child('temperature').exists() || (newData.child('temperature').isNumber())) && (!newData.child('humidity').exists() || (newData.child('humidity').isNumber() && newData.child('humidity').val() >= 0 && newData.child('humidity').val() <= 100)) && (!newData.child('pressure').exists() || (newData.child('pressure').isNumber())) && (!newData.child('pm1').exists() || (newData.child('pm1').isNumber() && newData.child('pm1').val() >= 0)) && (!newData.child('pm25').exists() || (newData.child('pm25').isNumber() && newData.child('pm25').val() >= 0)) && (!newData.child('pm10').exists() || (newData.child('pm10').isNumber() && newData.child('pm10').val() >= 0)) && (!newData.child('latitude').exists() || (newData.child('latitude').isNumber() && newData.child('latitude').val() >= -90 && newData.child('latitude').val() <= 90)) && (!newData.child('longitude').exists() || (newData.child('longitude').isNumber() && newData.child('longitude').val() >= -180 && newData.child('longitude').val() <= 180))",
+          "temperature": {
+            ".validate": true
+          },
+          "humidity": {
+            ".validate": true
+          },
+          "pressure": {
+            ".validate": true
+          },
+          "pm1": {
+            ".validate": true
+          },
+          "pm25": {
+            ".validate": true
+          },
+          "pm10": {
+            ".validate": true
+          },
+          "latitude": {
+            ".validate": true
+          },
+          "longitude": {
+            ".validate": true
+          },
+          "$other": {
+            ".validate": false
+          }
+        },
+        "status": {
+          ".write": "auth != null && auth.token.email != null && auth.token.email.matches(/^esp[^@]*@gmail[.]com$/) && newData.exists()",
+          ".validate": "newData.hasChildren(['nodeId', 'timestamp', 'receivedAt', 'ready', 'message', 'modules']) && newData.child('nodeId').isString() && newData.child('nodeId').val() === $deviceId && newData.child('timestamp').isNumber() && newData.child('receivedAt').isNumber() && newData.child('ready').isBoolean() && newData.child('message').isString() && newData.child('timestampIso').isString() && newData.child('phase').isString() && newData.child('simulated').isBoolean() && newData.child('timestamp').isNumber() && newData.child('timestamp').val() >= 0 && newData.child('timestamp').val() % 1 === 0 && newData.child('receivedAt').isNumber() && newData.child('receivedAt').val() >= 0 && newData.child('receivedAt').val() % 1 === 0 && newData.child('sampleNumber').isNumber() && newData.child('sampleNumber').val() >= 0 && newData.child('sampleNumber').val() % 1 === 0 && newData.child('lastLatestTimestamp').isNumber() && newData.child('lastLatestTimestamp').val() >= 0 && newData.child('lastLatestTimestamp').val() % 1 === 0 && (newData.child('phase').val() === 'verifying_firebase' || newData.child('phase').val() === 'waiting_for_data' || newData.child('phase').val() === 'collecting') && newData.child('ready').val() === (newData.child('modules/bme280/ready').val() === true && newData.child('modules/pms7003/ready').val() === true && newData.child('modules/gps/ready').val() === true)",
+          "modules": {
+            ".validate": "newData.hasChildren(['bme280', 'pms7003', 'gps'])",
+            "$module": {
+              ".validate": "($module === 'bme280' || $module === 'pms7003' || $module === 'gps') && newData.hasChildren(['state', 'ready', 'message']) && newData.child('state').isString() && (newData.child('state').val() === 'ok' || newData.child('state').val() === 'no_data' || newData.child('state').val() === 'invalid_data' || newData.child('state').val() === 'stale' || newData.child('state').val() === 'read_error' || newData.child('state').val() === 'no_fix') && newData.child('ready').isBoolean() && newData.child('message').isString() && newData.child('dataMissing').isBoolean() && newData.child('dataMissing').val() === (newData.child('ready').val() === false) && newData.child('ready').val() === (newData.child('state').val() === 'ok') && (newData.child('state').val() !== 'no_fix' || $module === 'gps')"
+            }
+          }
+        }
+      }
+    },
+    "alerts": {
+      ".read": "auth != null && auth.token.email != null && auth.token.email.matches(/^esp[^@]*@gmail[.]com$/)"
+    },
+    "quiz-responses": {
+      "$responseId": {
+        ".read": false,
+        ".write": "auth != null && !data.exists() && newData.hasChildren(['player', 'completedAt', 'answers']) && newData.child('player').isString() && newData.child('answers').hasChildren()"
+      }
+    }
+  }
+}

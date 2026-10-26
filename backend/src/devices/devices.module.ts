@@ -4,11 +4,11 @@ import { MqttModule } from "../mqtt/mqtt.module";
 import { DevicesController } from "./devices.controller";
 import { DevicesService } from "./devices.service";
 import { DeviceModel, DeviceSchema } from "./schemas/device.schema";
-import { isFirebaseDataSource } from "../config/runtime";
+import { isModuleDataSource } from "../config/runtime";
 
 @Module({
   imports: [
-    ...(isFirebaseDataSource ? [] : [MongooseModule.forFeature([{ name: DeviceModel.name, schema: DeviceSchema }])]),
+    ...(isModuleDataSource ? [] : [MongooseModule.forFeature([{ name: DeviceModel.name, schema: DeviceSchema }])]),
     forwardRef(() => MqttModule)
   ],
   controllers: [DevicesController],
